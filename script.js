@@ -50,9 +50,28 @@ function update(time = 0) {
 
 update();
 
+function rotate(block) {
+    var len = block.length;
+    for (var i = 0; i < len/2; ++i) {
+        for (var j = i; j < len-i-1; ++j) {
+            //keep top values
+            var temp = block[i][j];
+            //move values right to top
+            block[i][j] = block[j][len-i-1];
+            //move values bottom to right
+            block[j][len-i-1] = block[len-i-1][len-j-1];
+            //move values left to bottom
+            block[len-i-1][len-j-1] = block[len-j-1][i];
+            //assign left to original top
+            block[len-j-1][i] = temp;
+        }
+    }
+}
+
 const LEFT = 37;
 const RIGHT = 39;
 const DOWN = 40;
+const ROTATE = 82;
 
 document.addEventListener('keydown', event => {
     if (event.keyCode === LEFT) --curr.posn.x;
@@ -61,5 +80,6 @@ document.addEventListener('keydown', event => {
         ++curr.posn.y;
         dropCountDown = dropInterval;
     }
+    if (event.keyCode === ROTATE) rotate(curr.block);
 });
 
