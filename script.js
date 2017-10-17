@@ -1,4 +1,4 @@
-var canvas = document.getElementById("tetris");
+var canvas = document.getElementById('tetris');
 var ctx = canvas.getContext('2d');
 ctx.scale(20,20);
 
@@ -30,7 +30,20 @@ function drawBlock(block,posn) {
     }
 }
 
-function update() {
+const dropInterval = 1000; //easy level
+let dropCountDown = dropInterval;
+
+let lastTime = 0;
+
+function update(time = 0) {
+    //console.log(time);
+    const timeElapsed = time - lastTime;
+    dropCountDown -= timeElapsed;
+    lastTime = time;
+    if (dropCountDown < 0) {
+        ++curr.posn.y;
+        dropCountDown = dropInterval;
+    }
     printGrid();
     requestAnimationFrame(update);
 }
@@ -44,6 +57,9 @@ const DOWN = 40;
 document.addEventListener('keydown', event => {
     if (event.keyCode === LEFT) --curr.posn.x;
     if (event.keyCode === RIGHT) ++curr.posn.x;
-    if (event.keyCode === DOWN) ++curr.posn.y;
+    if (event.keyCode === DOWN) {
+        ++curr.posn.y;
+        dropCountDown = dropInterval;
+    }
 });
 
