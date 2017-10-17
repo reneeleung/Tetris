@@ -48,7 +48,24 @@ function init(width,height) {
     return matrix;
 }
 
+function collectRows() {
+    rowcheck: for (var i = grid.length - 1; i >= 0; --i) {
+        for (var j = 0; j < grid[i].length; ++j) {
+            if (grid[i][j] === 0) {
+                continue rowcheck;
+            }
+        }
+        shiftRows(i);
+        ++i;
+    }
+}
 
+function shiftRows(start) {
+    for (var i = start; i > 0; --i) {
+        grid[i] = grid[i-1];
+    }
+    grid[0] = new Array(grid[0].length).fill(0);
+}
 var grid = init(12,20);
 console.table(grid);
 var curr = create();
@@ -83,6 +100,7 @@ function moveDown() {
     if (collide(grid,curr)) {
         --curr.posn.y;
         merge(grid,curr.block);
+        collectRows();
         curr = create();
     }
     dropCountDown = dropInterval;
