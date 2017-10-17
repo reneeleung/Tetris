@@ -2,18 +2,65 @@ var canvas = document.getElementById('tetris');
 var ctx = canvas.getContext('2d');
 ctx.scale(20,20);
 
-var tblock = [
+const tblock = [
     [0,0,0],
     [1,1,1],
     [0,1,0],
 ];
 
+const iblock = [
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+    [1,1,1,1]
+];
+
+const oblock = [
+    [1,1],
+    [1,1]
+];
+
+const jblock = [
+    [0,0,0],
+    [1,0,0],
+    [1,1,1]
+];
+
+const lblock = [
+    [0,0,0],
+    [0,0,1],
+    [1,1,1]
+];
+
+const sblock = [
+    [0,0,0],
+    [0,1,1],
+    [1,1,0]
+];
+
+const zblock = [
+    [0,0,0],
+    [1,1,0],
+    [0,1,1]
+];
+
+const blocksfactory = [
+    tblock,
+    iblock,
+    oblock,
+    jblock,
+    lblock,
+    sblock,
+    zblock
+];
+
 function create() {
     //create block randomly
+    var rand = Math.floor(Math.random() * blocksfactory.length);
     var curr = {
         posn: {x:4, y:0},
-        block: tblock,
-    }
+        block: blocksfactory[rand]
+    };
     return curr;
 }
 
