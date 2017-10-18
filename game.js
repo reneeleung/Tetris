@@ -54,6 +54,17 @@ const blocksfactory = [
     zblock
 ];
 
+const colors = [
+    "#9932CC",
+    "#00FFFF",
+    "#FFFF00",
+    "#FF00FF",
+    "#FFD700",
+    "#7CFC00",
+    "#DC143C"
+];
+
+
 function create() {
     //create block randomly
     var rand = Math.floor(Math.random() * blocksfactory.length);
@@ -65,11 +76,14 @@ function create() {
 }
 
 function merge(grid,block) {
+    //get index for color
+    var index = blocksfactory.indexOf(block);
     //merge curr block to grid
     for (var i = 0; i < block.length; ++i) {
         for (var j = 0; j < block[i].length; ++j) {
             if (block[i][j] !== 0) {
                 grid[i+curr.posn.y][j+curr.posn.x] = block[i][j];
+                gridColors[i+curr.posn.y][j+curr.posn.x] = colors[index];
             }
         }
     }
@@ -87,10 +101,13 @@ function collide(matrix,object) {
     return false;
 }
 
+var gridColors = [];
+
 function init(width,height) {
     var matrix = [];
     for (var i = 0; i < height; ++i) {
         matrix.push(new Array(width).fill(0));
+        gridColors.push(new Array(width).fill(""));
     }
     return matrix;
 }
@@ -128,7 +145,12 @@ function drawBlock(block,posn) {
     for (var i = 0; i < block.length; ++i) {
         for (var j = 0; j < block[i].length; ++j) {
             if (block[i][j] !== 0) {
-                ctx.fillStyle = "yellow";
+                var index = blocksfactory.indexOf(block); 
+                if (index === -1) {
+                    ctx.fillStyle = gridColors[i][j];
+                } else {
+                    ctx.fillStyle = colors[index];
+                }
                 ctx.fillRect(j + posn.x, i + posn.y, 1, 1);
             }
         }
