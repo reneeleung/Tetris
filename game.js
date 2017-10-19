@@ -12,36 +12,36 @@ const iblock = [
     [0,0,0,0],
     [0,0,0,0],
     [0,0,0,0],
-    [1,1,1,1]
+    [2,2,2,2]
 ];
 
 const oblock = [
-    [1,1],
-    [1,1]
+    [3,3],
+    [3,3]
 ];
 
 const jblock = [
     [0,0,0],
-    [1,0,0],
-    [1,1,1]
+    [4,0,0],
+    [4,4,4]
 ];
 
 const lblock = [
     [0,0,0],
-    [0,0,1],
-    [1,1,1]
+    [0,0,5],
+    [5,5,5]
 ];
 
 const sblock = [
     [0,0,0],
-    [0,1,1],
-    [1,1,0]
+    [0,6,6],
+    [6,6,0]
 ];
 
 const zblock = [
     [0,0,0],
-    [1,1,0],
-    [0,1,1]
+    [7,7,0],
+    [0,7,7]
 ];
 
 const blocksfactory = [
@@ -82,14 +82,11 @@ function create() {
 }
 
 function merge(grid,block) {
-    //get index for color
-    var index = blocksfactory.indexOf(block);
     //merge curr block to grid
     for (var i = 0; i < block.length; ++i) {
         for (var j = 0; j < block[i].length; ++j) {
             if (block[i][j] !== 0) {
                 grid[i+curr.posn.y][j+curr.posn.x] = block[i][j];
-                gridColors[i+curr.posn.y][j+curr.posn.x] = colors[index];
             }
         }
     }
@@ -107,7 +104,6 @@ function collide(matrix,object) {
     return false;
 }
 
-var gridColors = [];
 var score = 0;
 
 function init(width,height) {
@@ -115,7 +111,6 @@ function init(width,height) {
     var matrix = [];
     for (var i = 0; i < height; ++i) {
         matrix.push(new Array(width).fill(0));
-        gridColors.push(new Array(width).fill(""));
     }
     return matrix;
 }
@@ -160,12 +155,7 @@ function drawBlock(block,posn) {
     for (var i = 0; i < block.length; ++i) {
         for (var j = 0; j < block[i].length; ++j) {
             if (block[i][j] !== 0) {
-                var index = blocksfactory.indexOf(block); 
-                if (index === -1) {
-                    ctx.fillStyle = gridColors[i][j];
-                } else {
-                    ctx.fillStyle = colors[index];
-                }
+                ctx.fillStyle = colors[block[i][j] - 1];
                 ctx.fillRect(j + posn.x, i + posn.y, 1, 1);
             }
         }
