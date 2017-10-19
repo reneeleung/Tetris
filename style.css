@@ -1,5 +1,6 @@
 body {
     background-color: lightblue;
+    padding: 0px;
 }
 
 h1 {
@@ -7,8 +8,14 @@ h1 {
     font-size: 30px;
 }
 
+h2 {
+    text-align: right;
+    font-size: 15px;
+}
+
 canvas {
     display: block;
     margin: auto;
     padding: 0;
+    border: solid 20px #888888;
 }
