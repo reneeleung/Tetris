@@ -68,10 +68,16 @@ const colors = [
 function create() {
     //create block randomly
     var rand = Math.floor(Math.random() * blocksfactory.length);
+    var block = blocksfactory[rand];
     var curr = {
-        posn: {x:4, y:0},
-        block: blocksfactory[rand]
+        posn: {x:grid[0].length/2,
+               y:0},
+        block: block
     };
+    if (collide(grid,curr)) {
+        alert("Game Over");
+        grid = init(12,20);
+    }
     return curr;
 }
 
