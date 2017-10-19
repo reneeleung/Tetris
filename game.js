@@ -108,8 +108,10 @@ function collide(matrix,object) {
 }
 
 var gridColors = [];
+var score = 0;
 
 function init(width,height) {
+    score = 0;
     var matrix = [];
     for (var i = 0; i < height; ++i) {
         matrix.push(new Array(width).fill(0));
@@ -119,6 +121,7 @@ function init(width,height) {
 }
 
 function collectRows() {
+    var accum = 1;
     rowcheck: for (var i = grid.length - 1; i >= 0; --i) {
         for (var j = 0; j < grid[i].length; ++j) {
             if (grid[i][j] === 0) {
@@ -127,6 +130,8 @@ function collectRows() {
         }
         shiftRows(i);
         ++i;
+        score += accum * 100;
+        accum *= 2;
     }
 }
 
@@ -145,6 +150,10 @@ function printGrid() {
     ctx.fillRect(0,0,canvas.width,canvas.height);
     drawBlock(grid,{x:0,y:0});
     drawBlock(curr.block,curr.posn);
+}
+
+function updateScore() {
+    document.getElementById('score').innerText = score;
 }
 
 function drawBlock(block,posn) {
@@ -194,6 +203,7 @@ function update(time = 0) {
         moveDown();
     }
     printGrid();
+    updateScore();
     requestAnimationFrame(update);
 }
 
