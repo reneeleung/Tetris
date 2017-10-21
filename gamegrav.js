@@ -64,6 +64,9 @@ const colors = [
     "#DC143C"
 ];
 
+function restart() {
+    grid = init(12.20);
+}
 
 function create() {
     //create block randomly
@@ -71,23 +74,12 @@ function create() {
     var block = blocksfactory[rand];
     var curr = {
         posn: {x:grid[0].length/2,
-               y: gravity? 0 : grid.length - 1},
+               y: gravity? 0: grid.length - 1},
         block: block
     };
-    if (!gravity) {
-        var offset = -1;
-        while (collide(grid,curr)) {
-            curr.posn.y += offset;
-            //move to opposite direction
-            offset = -(offset + (offset > 0? 1 : -1));
-            if (offset > block.length) {
-                break;
-            }
-        }
-    }
     if (collide(grid,curr)) {
         alert("Game Over");
-        grid = init(12,20);
+        restart();
     }
     return curr;
 }
@@ -127,38 +119,28 @@ function init(width,height) {
 }
 
 function collectRows() {
-    var start = gravity? grid.length - 1: 0;
-    const end = gravity? 0: grid.length - 1;
     var accum = 1;
-    rowcheck: while ((gravity && start >= end) || (!gravity && start <= end)) {
-        for (var j = 0; j < grid[start].length; ++j) {
-            if (grid[start][j] === 0) {
-                if (gravity) start -= 1;
-                if (!gravity) start += 1;
+    rowcheck: for (var i = grid.length - 1; i >= 0; --i) {
+        for (var j = 0; j < grid[i].length; ++j) {
+            if (grid[i][j] === 0) {
                 continue rowcheck;
             }
         }
-        shiftRows(start,end);
+        shiftRows(i);
+        ++i;
         score += accum * 100;
         accum *= 2;
     }
 }
 
-function shiftRows(start,end) {
-    if (gravity) {
-        for (var i = start; i > end; --i) {
-            grid[i] = grid[i-1];
-        }
-    } else {
-        for (var i = start; i < end; ++i) {
-            grid[i] = grid[i+1];
-        }
+function shiftRows(start) {
+    for (var i = start; i > 0; --i) {
+        grid[i] = grid[i-1];
     }
-    grid[end] = new Array(grid[end].length).fill(0);
+    grid[0] = new Array(grid[0].length).fill(0);
 }
 var gravity = true;
 var grid = init(12,20);
-console.table(grid);
 var curr = create();
 
 function printGrid() {
@@ -271,6 +253,7 @@ document.addEventListener('keydown', event => {
     }
     if (event.keyCode === ROTATE) rotate(curr.block);
 });
+
 function toggleGravity() {
     if (gravity) {
         gravity = false;
@@ -279,6 +262,6 @@ function toggleGravity() {
         gravity = true;
         document.getElementById("gravity").innerHTML = "Anti-gravity Challenge";
     }
-    grid = init(12,20);
+    restart();
     curr = create();
 }
